@@ -7,7 +7,6 @@ a=round(rand(1,i));%产生随机序列
 t1=linspace(0,5e-3,n);
 fc1=6e3;%载波1频率
 fc2=8e3;%载波2频率
-fm=i/5*1e3;%基带信号频率
 fc3=[];
 b=[];
 for ii = 1:8
@@ -30,12 +29,14 @@ L=fix(N/len);
 s=[];
 fc_sp=[1 25 59 93]*1e6;
 
-for i=1:L
+zero = zeros(1,2000);
+
+for i=1:L/2
     k=unidrnd(length(fc_sp));
     ss=Generate_cw(fc+fc_sp(k),fs,len);
-    s=[s ss];
+    s=[s zero ss];
 end
-% s = s.*fsk_sig;
+s = s.*fsk_sig;
 if N-L*len>0
    for ii=1:N-L*len
     s=[s 0];
