@@ -3,7 +3,7 @@
 %             Version 1.0               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% clear,close all
+clear,close all
 
 %% Signal model
 SNR = 10;                                   % Input SNR
@@ -167,8 +167,7 @@ NumDomEigVals= FindNonZeroValues(eig(Q),5e-8);
 [V,d] = eig_r(Q,min(NumDomEigVals,2*N));
 v = V*diag(sqrt(d));
 % N iterations at most, since we force symmetry in the support...
-iterNum = size(OriSupp,2);
-[u, RecSupp] = RunOMP_Unnormalized(v, A, iterNum, 0, 1e-12, false);
+[u, RecSupp] = RunOMP_Unnormalized(v, A, N, 0, 1e-12, false);
 % [u, RecSupp] = RunSAMP_Unnormalized(v, A, 1);
 RecSuppSorted = sort(unique(RecSupp));
 OriSupp = Sorig'
@@ -200,72 +199,74 @@ x_rec(:,16001:19695) = 0;
 % snr = 20.*log10(norm(x(:,2601:3600))/norm(x(:,2601:3600)-x_rec(:,2601:3600)))
 snr = 20.*log10(norm(x)/norm(x-x_rec))
 %% plot module
-% figure(1)
-% subplot(211)
-% plot(x)
-% title('Original signal');
+figure(1)
+subplot(211)
+plot(x)
+title('Original signal');
 % grid on;
-% set(gca,'YLim',[-1.5 1.5]);
-% 
-% subplot(212)
-% plot(abs(real(fft(x))));
+set(gca,'YLim',[-1.5 1.5]);
+
+subplot(212)
+plot(abs(real(fft(x))));
 % grid on;
-% title('Frequency spectrum of the original signal');
-% figure(3)
-% subplot(211)
-% plot(x)
+title('Frequency spectrum of the original signal');
+figure(3)
+subplot(211)
+plot(x)
 % grid on;
-% title('Original Signal');
-% set(gca,'YLim',[-2 2]);
-% subplot(212)
-% plot(x_rec)
+title('Original Signal');
+set(gca,'YLim',[-2 2]);
+subplot(212)
+plot(x_rec)
 % grid on;
-% title('Recostruction Signal');
-% 
-% figure(4)
-% subplot(211)
-% plot(abs(real(fft(x))));
+title('Recostruction Signal');
+
+figure(4)
+subplot(211)
+plot(abs(real(fft(x))));
 % grid on;
-% title('Frequency spectrum of original signal');
-% subplot(212)
-% plot(abs(real(fft(x_rec))));
+title('Frequency spectrum of original signal');
+subplot(212)
+plot(abs(real(fft(x_rec))));
 % grid on;
-% title('Frequency spectrum of recostruction signal');
-% 
-% figure(5)
-% plot(abs(real(fft(x))));
-% hold on
-% plot(abs(real(fft(x_rec))),'r');
+title('Frequency spectrum of recostruction signal');
+
+figure(5)
+plot(abs(real(fft(x))));
+hold on
+plot(abs(real(fft(x_rec))),'r');
 % grid on;
-% legend('Original Signal', 'Recostruction Signal');
-% title('Original Signal VS Recostruction Signal');
-% 
-% figure(6)
-% subplot(311)
-% plot(x(:,2001:4000))
+legend('Original Signal', 'Recostruction Signal');
+title('Original Signal VS Recostruction Signal');
+
+figure(6)
+subplot(311)
+plot(x(:,2001:4000))
 % grid on;
-% title('Original Signal');
-% set(gca,'YLim',[-2 2]);
-% subplot(312)
-% plot(x_rec(:,2001:4000))
+title('Original Signal');
+set(gca,'YLim',[-2 2]);
+subplot(312)
+plot(x_rec(:,2001:4000))
+title('Recostruction signal');
 % grid on;
-% subplot(313)
-% plot(x(:,2001:4000))
-% hold on;
-% plot(x_rec(:,2001:4000),'r')
+subplot(313)
+plot(x(:,2001:4000))
+hold on;
+plot(x_rec(:,2001:4000),'r')
+title('Original Signal VS Recostruction Signal');
 % grid on;
-% 
-% figure(7)
-% subplot(211)
-% plot(x)
-% title('Original signal');
+
+figure(7)
+subplot(211)
+plot(x)
+title('Original signal');
 % grid on;
-% set(gca,'YLim',[-1.5 1.5]);
-% 
-% subplot(212)
-% plot(abs(real(fft(x))));
-% grid on;
-% title('Frequency spectrum of the original signal');
+set(gca,'YLim',[-1.5 1.5]);
+
+subplot(212)
+plot(abs(real(fft(x))));
+grid on;
+title('Frequency spectrum of the original signal');
 %% Analysis & Plots
 % figure,
 % plot(t_axis,x,'r'), axis([t_axis(1) t_axis(end) 1.1*min(x) 1.1*max(x) ])
