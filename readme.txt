@@ -1,4 +1,4 @@
-This package is used to simulate the Modulated Wideband Converter in MATLAB.
+This package is used to simulate the Frequency Hopping signal based on Modulated Wideband Converter in MATLAB.
 
 The package includes:
 
