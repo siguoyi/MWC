@@ -27,7 +27,7 @@ fsk_sig = cos(2*pi*fc3.*t1);
 L=fix(N/len);
 
 s=[];
-fc_sp=[11 25 59 93]*1e3;
+fc_sp=[11 25 59 93]*1e6;
 
 zero = zeros(1,2000);
 for i=1:L/2

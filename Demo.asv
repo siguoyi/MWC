@@ -21,12 +21,16 @@ TimeResolution = Tnyq/R;
 TimeWin = [0  L*R*K-1 L*R*(K+K0)-1]*TimeResolution; % Time interval in which signal is observed
 Taui = [0.7 0.4 0.3]*max(TimeWin);          % Time offest of the i'th band
 
+fprintf(1,'---------------------------------------------------------------------------------------------\n');
+fprintf(1,'Signal model\n');
+fprintf(1,'   N= %d, B=%3.2f MHz, fnyq = %3.2f GHz\n', N, B/1e6, fnyq/1e9);
+
 %% Sampling parameters
 ChannelNum = 50;                            % Number of channels
 L = 195;                                    % Aliasing rate
 M = 195;
 fp = fnyq/L;
-fs = fp;                                    % Sampling rate at each channel, use fs=qfp, with odd q
+fs = fp;              .                      % Sampling rate at each channel, use fs=qfp, with odd q
 m = ChannelNum;                             % Number of channels
 
 % sign alternating  mixing
@@ -38,10 +42,22 @@ Ts = 1/fs;
 L0 = floor(M/2);                            
 L = 2*L0+1;
 
+fprintf(1,'---------------------------------------------------------------------------------------------\n');
+fprintf(1,'Sampling parameters\n');
+fprintf(1,'   fp = %3.2f MHz, m=%d, M=%d\n',fp/1e6,m,M);
+fprintf(1,'   L0 = %d, L=%d, Tp=%3.2f uSec, Ts=%3.2f uSec\n', L0, L, Tp/1e-6, Ts/1e-6);
+
+
 %% Signal Representation
 t_axis = TimeWin(1)  : TimeResolution : TimeWin(end);     % Time axis
 t_axis_sig  = TimeWin(1)  : TimeResolution : TimeWin(2);
 
+fprintf(1,'---------------------------------------------------------------------------------------------\n');
+fprintf(1,'Continuous representation\n');
+fprintf(1,'   Time  window = [%3.2f , %3.2f) uSec\n',TimeWin(1)/1e-6, TimeWin(2)/1e-6 );
+fprintf(1,'   Time resolution = %3.2f nSec, grid length = %d\n', TimeResolution/1e-9, length(t_axis));
+fprintf(1,'---------------------------------------------------------------------------------------------\n');
+fprintf(1,'Generating signal\n');
 % Signal Generation
 x = zeros(size(t_axis_sig));
 fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
@@ -53,10 +69,6 @@ x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
 x=real(gen_tiaopin(10e6,100e6,length(x),2000));
 x = [x, zeros(1,R*K0*L)];               % Zero padding
-% figure(1)
-% plot(x)
-% figure(2)
-% plot(abs(real(fft(x))))
 %% Noise Generation
 noise_nyq = randn(1,(K+K0)*L);              % Generate white Gaussian nosie within [-fnyq,fnyq]
 noise = interpft(noise_nyq, R*(K+K0)*L);    % Interpolate into a finer grid (the same length as the signal)
@@ -99,6 +111,10 @@ for channel = 1:m
 end
 Digital_time_axis = downsample(t_axis,decfactor);
 DigitalLength = length(Digital_time_axis);
+
+fprintf(1,'\n---------------------------------------------------------------------------------------------\n');
+fprintf(1,'Sampling summary\n');
+fprintf(1,'   %d channels, each gives %d samples\n',m,DigitalLength);
 
 %% CTF block
 fprintf(1,'---------------------------------------------------------------------------------------------\n');
@@ -161,7 +177,7 @@ plot(x)
 grid on;
 plot(x)
 title('Original signal');
-set(gca,'YLim',[-2 2]);
+set(gca,'YLim',[-1.5 1.5]);
 subplot(212)
 plot(abs(real(fft(x))));
 title('Frequency spectrum of the original signal');
@@ -203,3 +219,25 @@ subplot(313)
 plot(x(:,2001:4000))
 hold on;
 plot(x_rec(:,2001:4000),'r')
+%% Analysis & Plots
+% figure,
+% plot(t_axis,x,'r'), axis([t_axis(1) t_axis(end) 1.1*min(x) 1.1*max(x) ])
+% title('Original signal'), xlabel('t')
+% grid on
+% figure,plot(t_axis,sig,'r'), axis([t_axis(1) t_axis(end) 1.1*min(x) 1.1*max(x) ])
+% title('Original noised signal'), xlabel('t')
+% grid on
+% figure, plot(t_axis,x_rec), axis([t_axis(1) t_axis(end) 1.1*min(x) 1.1*max(x) ]),
+% grid on,
+% title('Reconstructed signal'), xlabel('t')
+% figure,
+% plot(t_axis,x,'r'), axis([t_axis(1) t_axis(end) 1.1*min(x) 1.1*max(x) ])
+% hold on
+% plot(t_axis,x_rec), axis([t_axis(1) t_axis(end) 1.1*min(x) 1.1*max(x) ])
+% grid on,
+% % title('Original signal & Reconstructed signal'), xlabel('t')
+% legend('Original signal','Reconstructed signal')
+% figure,
+% error = x_rec - x;
+% plot(error)
+% grid on
