@@ -4,7 +4,6 @@ function s=gen_tiaopin(fc,fs,N,len)
 i=8;%基带信号码元数
 n=16000;
 a=round(rand(1,i));%产生随机序列
-% a=[1 0 1 1 0 1 0 1];
 t1=linspace(0,5e-3,n);
 fc1=6e3;%载波1频率
 fc2=8e3;%载波2频率

@@ -202,29 +202,18 @@ snr = 20.*log10(norm(x)/norm(x-x_rec))
 %% plot module
 figure(1)
 subplot(211)
-plot(t_axis,x)
-title('Original signal');
+plot(x)
 grid on;
+plot(x)
+title('Original signal');
+% grid on;
 set(gca,'YLim',[-1.5 1.5]);
+
 subplot(212)
 plot(abs(real(fft(x))));
-grid on;
+% grid on;
 title('Frequency spectrum of the original signal');
-
 figure(2)
-subplot(211)
-plot(x)
-grid on;
-plot(x)
-title('Original signal');
-% grid on;
-set(gca,'YLim',[-1.5 1.5]);
-
-subplot(212)
-plot(abs(real(fft(x))));
-% grid on;
-title('Frequency spectrum of the original signal');
-figure(3)
 subplot(211)
 plot(x)
 % grid on;
