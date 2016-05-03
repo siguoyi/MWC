@@ -51,7 +51,9 @@ fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
 han_win = hann(length(x))';             % Add window
 x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
-x=real(gen_tiaopin(10e6,100e6,length(x),2000));
+[signal ff] = gen_tiaopin(10e6,100e6,length(x),2000);
+x=real(signal);
+ff = [ff zeros(1,R*K0*L)];
 x = [x, zeros(1,R*K0*L)];               % Zero padding
 % figure(1)
 % plot(x)
@@ -146,60 +148,66 @@ for ii = 1:size(hat_zt,1)                      % modulate each band to their cor
     x_rec = x_rec+hat_zt(ii,:).*exp(j*2*pi*(RecSuppSorted(ii)-L0-1)*fp.*t_axis);
 end
 x_rec = real(x_rec);
-x_rec(:,1:2000) = 0;
-x_rec(:,4001:6000) = 0;
-x_rec(:,8001:10000) = 0;
-x_rec(:,12001:14000) = 0;
+% x_rec(:,1:2000) = 0;
+% x_rec(:,4001:6000) = 0;
+% x_rec(:,8001:10000) = 0;
+% x_rec(:,12001:14000) = 0;
 x_rec(:,16001:19695) = 0;
 % sig = x + noise*sqrt(CurrentSNR/SNR_val);
 snr1 = 20.*log10(norm(x(:,2601:3600))/norm(x(:,2601:3600)-x_rec(:,2601:3600)))
 snr = 20.*log10(norm(x)/norm(x-x_rec))
+%% demodulator
+fsk_sig = cos(2*pi*ff.*t_axis);
+plot(fsk_sig)
+st1 = x_rec.*fsk_sig;
+[f,sf1] = T2F(t_axis,st1);%Í¨¹ýµÍÍ¨ÂË²¨Æ÷
+[t,st1] = lpf(f,sf1,1);
+plot(t,st1)
 %% plot module
-figure(1)
-subplot(211)
-plot(x)
-grid on;
-plot(x)
-title('Original signal');
-set(gca,'YLim',[-2 2]);
-subplot(212)
-plot(abs(real(fft(x))));
-title('Frequency spectrum of the original signal');
-
-figure(2)
-subplot(211)
-plot(x)
-title('Original Signal');
-set(gca,'YLim',[-2 2]);
-subplot(212)
-plot(x_rec)
-title('Recostruction Signal');
-
-figure(3)
-subplot(211)
-plot(abs(real(fft(x))));
-title('Frequency spectrum of original signal');
-subplot(212)
-plot(abs(real(fft(x_rec))));
-title('Frequency spectrum of recostruction signal');
-
-figure(4)
-plot(abs(real(fft(x))));
-hold on
-plot(abs(real(fft(x_rec))),'r');
-legend('Original Signal', 'Recostruction Signal');
-title('Original Signal VS Recostruction Signal');
-
-
-figure(5)
-subplot(311)
-plot(x(:,2001:4000))
-title('Original Signal');
-set(gca,'YLim',[-2 2]);
-subplot(312)
-plot(x_rec(:,2001:4000))
-title('Recostruction signal');
-subplot(313)
-plot(x(:,2001:4000))
-hold on;
-plot(x_rec(:,2001:4000),'r')
+% figure(1)
+% subplot(211)
+% plot(x)
+% grid on;
+% plot(x)
+% title('Original signal');
+% set(gca,'YLim',[-2 2]);
+% subplot(212)
+% plot(abs(real(fft(x))));
+% title('Frequency spectrum of the original signal');
+% 
+% figure(2)
+% subplot(211)
+% plot(x)
+% title('Original Signal');
+% set(gca,'YLim',[-2 2]);
+% subplot(212)
+% plot(x_rec)
+% title('Recostruction Signal');
+% 
+% figure(3)
+% subplot(211)
+% plot(abs(real(fft(x))));
+% title('Frequency spectrum of original signal');
+% subplot(212)
+% plot(abs(real(fft(x_rec))));
+% title('Frequency spectrum of recostruction signal');
+% 
+% figure(4)
+% plot(abs(real(fft(x))));
+% hold on
+% plot(abs(real(fft(x_rec))),'r');
+% legend('Original Signal', 'Recostruction Signal');
+% title('Original Signal VS Recostruction Signal');
+% 
+% figure(5)
+% subplot(311)
+% plot(x(:,2001:4000))
+% title('Original Signal');
+% set(gca,'YLim',[-2 2]);
+% subplot(312)
+% plot(x_rec(:,2001:4000))
+% title('Recostruction signal');
+% subplot(313)
+% plot(x(:,2001:4000))
+% hold on;
+% plot(x_rec(:,2001:4000),'r')
