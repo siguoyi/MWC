@@ -51,9 +51,9 @@ fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
 han_win = hann(length(x))';             % Add window
 x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
-[signal ff] = gen_tiaopin(10e6,100e6,length(x),2000);
+[signal fc s1] = gen_tiaopin(10e6,100e6,length(x),2000);
 x=real(signal);
-ff = [ff zeros(1,R*K0*L)];
+s1 = [s1 zeros(1,R*K0*L)];
 x = [x, zeros(1,R*K0*L)];               % Zero padding
 % figure(1)
 % plot(x)
@@ -157,12 +157,17 @@ x_rec(:,16001:19695) = 0;
 snr1 = 20.*log10(norm(x(:,2601:3600))/norm(x(:,2601:3600)-x_rec(:,2601:3600)))
 snr = 20.*log10(norm(x)/norm(x-x_rec))
 %% demodulator
-fsk_sig = cos(2*pi*ff.*t_axis);
-plot(fsk_sig)
-st1 = x_rec.*fsk_sig;
-[f,sf1] = T2F(t_axis,st1);%通过低通滤波器
+% fsk_sig = cos(2*pi*fc*tt(:,1:16000));
+temp_fsk = x_rec(:,1:16000).*s1(:,1:16000);
+figure(1)
+plot(s1(:,1:16000))
+figure(2)
+plot(abs(temp_fsk))
+st1 = x_rec(:,1:16000).*fsk_sig;
+[f,sf1] = T2F(tt(:,1:16000),st1);%通过低通滤波器
 [t,st1] = lpf(f,sf1,1);
-plot(t,st1)
+figure(2)
+plot(st1)
 %% plot module
 % figure(1)
 % subplot(211)
