@@ -1,4 +1,4 @@
-function [s fc1 s1]=gen_tiaopin(fc,fs,N,len)
+function [s fc1 s1 tt]=gen_tiaopin(fc,fs,N,len)
 
 %% =============== 生成FSK信号 =====================
 i=8;%基带信号码元数
@@ -30,11 +30,11 @@ L=fix(N/len);
 s=[];
 fc_sp=[11 25 59 93]*1e3;
 
-one = ones(1,2000);
-for i=1:L/2
+% one = ones(1,2000);
+for i=1:L
     k=unidrnd(length(fc_sp));
     ss=Generate_cw(fc+fc_sp(k),fs,len);
-    s=[s one ss];
+    s=[s ss];
 end
 s1 = [s];
 s = s.*fsk_sig;
