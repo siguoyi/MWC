@@ -51,7 +51,7 @@ fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
 han_win = hann(length(x))';             % Add window
 x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
-[signal fc1 fc2 s1 tt] = gen_tiaopin(10e6,100e6,length(x),2000);
+[signal fc1 fc2 s1 tt b] = gen_tiaopin(10e6,100e6,length(x),1000);
 x=real(signal);
 s1 = [s1 zeros(1,R*K0*L)];
 tt = [tt zeros(1,R*K0*L)];
@@ -161,8 +161,7 @@ snr = 20.*log10(norm(x)/norm(x-x_rec))
 temp_fsk = x_rec(:,1:16000).*s1(:,1:16000);
 [f,sf1] = T2F(tt(:,1:16000),temp_fsk);%通过低通滤波器
 [t,st1] = lpf(f,sf1,16000);
-figure(1)
-plot(st1);
+
 fsk_sig1 = cos(2*pi*fc1*tt(:,1:16000));
 fsk_sig1 = st1.*cos(2*pi*fc1*tt(:,1:16000));
 [f,sf2] = T2F(tt(:,1:16000),fsk_sig1);%通过低通滤波器
@@ -173,72 +172,97 @@ fsk_sig2 = st1.*cos(2*pi*fc2*tt(:,1:16000));
 [f,sf3] = T2F(tt(:,1:16000),fsk_sig2);%通过低通滤波器
 [t,st3] = lpf(f,sf3,16000);
 
-figure(2)
 sss = st2 - st3;
-plot(sss);
-i=8;
+
+i=16;
 for m=0:i-1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%抽样判决
-    if sss(1,m*2000+500)>0;
-        for j=m*2000+1:(m+1)*2000;
+    if sss(1,m*1000+500)>0;
+        for j=m*1000+1:(m+1)*1000;
              at(1,j)=0;
         end
     else
-        for j=m*2000+1:(m+1)*2000;
+        for j=m*1000+1:(m+1)*1000;
              at(1,j)=1;
         end
     end
 end
-figure(3)
-plot(at)
-set(gca,'YLim',[-2 2]);
 %% plot module
-% figure(1)
-% subplot(211)
-% plot(x)
-% grid on;
-% plot(x)
-% title('Original signal');
-% set(gca,'YLim',[-2 2]);
-% subplot(212)
-% plot(abs(real(fft(x))));
-% title('Frequency spectrum of the original signal');
-% 
-% figure(2)
-% subplot(211)
-% plot(x)
-% title('Original Signal');
-% set(gca,'YLim',[-2 2]);
-% subplot(212)
-% plot(x_rec)
-% title('Recostruction Signal');
-% 
-% figure(3)
-% subplot(211)
-% plot(abs(real(fft(x))));
-% title('Frequency spectrum of original signal');
-% subplot(212)
-% plot(abs(real(fft(x_rec))));
-% title('Frequency spectrum of recostruction signal');
-% 
-% figure(4)
-% plot(abs(real(fft(x))));
-% hold on
-% plot(abs(real(fft(x_rec))),'r');
-% legend('Original Signal', 'Recostruction Signal');
-% title('Original Signal VS Recostruction Signal');
-% 
-% figure(5)
-% subplot(311)
-% plot(x(:,2001:4000))
-% title('Original Signal');
-% set(gca,'YLim',[-1.5 1.5]);
-% subplot(312)
-% plot(x_rec(:,2001:4000))
-% title('Recostruction signal');
-% set(gca,'YLim',[-1.5 1.5]);
-% subplot(313)
-% plot(x(:,2001:4000))
-% hold on;
-% plot(x_rec(:,2001:4000),'r')
-% set(gca,'YLim',[-1.5 1.5]);
+figure(1)
+subplot(211)
+plot(x)
+grid on;
+plot(x)
+title('原始信号');
+set(gca,'YLim',[-2 2]);
+subplot(212)
+plot(abs(real(fft(x))));
+title('原始信号频谱');
+
+figure(2)
+subplot(211)
+plot(x)
+title('原始信号');
+set(gca,'YLim',[-2 2]);
+subplot(212)
+plot(x_rec)
+title('重构信号');
+
+figure(3)
+subplot(211)
+plot(abs(real(fft(x))));
+title('原始信号频谱');
+subplot(212)
+plot(abs(real(fft(x_rec))));
+title('重构信号频谱');
+
+figure(4)
+plot(abs(real(fft(x))));
+hold on
+plot(abs(real(fft(x_rec))),'r');
+legend('原始信号', '重构信号');
+title('原始信号VS重构信号');
+
+figure(5)
+subplot(311)
+plot(x(:,2001:4000))
+title('原始信号');
+set(gca,'YLim',[-1.5 1.5]);
+subplot(312)
+plot(x_rec(:,2001:4000))
+title('重构信号');
+set(gca,'YLim',[-1.5 1.5]);
+subplot(313)
+plot(x(:,2001:4000))
+hold on;
+plot(x_rec(:,2001:4000),'r')
+set(gca,'YLim',[-1.5 1.5]);
+title('原始信号VS重构信号');
+
+figure(6)
+subplot(211)
+plot(x_rec(:,1:16000));
+title('重构信号')
+subplot(212)
+plot(st1(:,1:16000));
+title('2FSK信号');
+
+figure(7)
+subplot(211)
+plot(sss)
+set(gca,'YLim',[-1.5 1.5]);
+title('抽样判决波形');
+subplot(212)
+plot(at)
+set(gca,'YLim',[-1.5 1.5]);
+title('重构码元波形');
+
+figure(8)
+subplot(211)
+plot(b)
+set(gca,'YLim',[-1.5 1.5]);
+title('原始码元波形');
+subplot(212)
+plot(at)
+set(gca,'YLim',[-1.5 1.5]);
+title('重构码元波形');
