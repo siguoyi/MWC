@@ -51,7 +51,8 @@ fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
 han_win = hann(length(x))';             % Add window
 x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
-[signal fc1 fc2 s1 tt b] = gen_tiaopin(10e6,100e6,length(x),1000);
+len=500;
+[signal fc1 fc2 s1 tt b] = gen_tiaopin(10e6,100e6,length(x),len);
 x=real(signal);
 s1 = [s1 zeros(1,R*K0*L)];
 tt = [tt zeros(1,R*K0*L)];
@@ -162,90 +163,90 @@ temp_fsk = x_rec(:,1:16000).*s1(:,1:16000);
 [f,sf1] = T2F(tt(:,1:16000),temp_fsk);%通过低通滤波器
 [t,st1] = lpf(f,sf1,16000);
 
-fsk_sig1 = cos(2*pi*fc1*tt(:,1:16000));
 fsk_sig1 = st1.*cos(2*pi*fc1*tt(:,1:16000));
 [f,sf2] = T2F(tt(:,1:16000),fsk_sig1);%通过低通滤波器
 [t,st2] = lpf(f,sf2,16000);
 
-fsk_sig2 = cos(2*pi*fc2*tt(:,1:16000));
 fsk_sig2 = st1.*cos(2*pi*fc2*tt(:,1:16000));
 [f,sf3] = T2F(tt(:,1:16000),fsk_sig2);%通过低通滤波器
 [t,st3] = lpf(f,sf3,16000);
 
 sss = st2 - st3;
 
-i=16;
+i=16000/len;
 for m=0:i-1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%抽样判决
-    if sss(1,m*1000+500)>0;
-        for j=m*1000+1:(m+1)*1000;
+% [max_value,position] = max(abs(sss(1,m*len+1:(m+1)*len)));
+    if sss(1,m*len+253)>0;
+%     if sss(1,position)>0;
+        for j=m*len+1:(m+1)*len;
              at(1,j)=0;
         end
     else
-        for j=m*1000+1:(m+1)*1000;
+        for j=m*len+1:(m+1)*len;
              at(1,j)=1;
         end
     end
 end
 %% plot module
-figure(1)
-subplot(211)
-plot(x)
-grid on;
-plot(x)
-title('原始信号');
-set(gca,'YLim',[-2 2]);
-subplot(212)
-plot(abs(real(fft(x))));
-title('原始信号频谱');
-
-figure(2)
-subplot(211)
-plot(x)
-title('原始信号');
-set(gca,'YLim',[-2 2]);
-subplot(212)
-plot(x_rec)
-title('重构信号');
-
-figure(3)
-subplot(211)
-plot(abs(real(fft(x))));
-title('原始信号频谱');
-subplot(212)
-plot(abs(real(fft(x_rec))));
-title('重构信号频谱');
-
-figure(4)
-plot(abs(real(fft(x))));
-hold on
-plot(abs(real(fft(x_rec))),'r');
-legend('原始信号', '重构信号');
-title('原始信号VS重构信号');
-
-figure(5)
-subplot(311)
-plot(x(:,2001:4000))
-title('原始信号');
-set(gca,'YLim',[-1.5 1.5]);
-subplot(312)
-plot(x_rec(:,2001:4000))
-title('重构信号');
-set(gca,'YLim',[-1.5 1.5]);
-subplot(313)
-plot(x(:,2001:4000))
-hold on;
-plot(x_rec(:,2001:4000),'r')
-set(gca,'YLim',[-1.5 1.5]);
-title('原始信号VS重构信号');
-
-figure(6)
-subplot(211)
-plot(x_rec(:,1:16000));
-title('重构信号')
-subplot(212)
-plot(st1(:,1:16000));
-title('2FSK信号');
+% figure(1)
+% subplot(211)
+% plot(x)
+% grid on;
+% plot(x)
+% title('原始信号');
+% set(gca,'YLim',[-2 2]);
+% subplot(212)
+% plot(abs(real(fft(x))));
+% title('原始信号频谱');
+% 
+% figure(2)
+% subplot(211)
+% plot(x)
+% title('原始信号');
+% set(gca,'YLim',[-2 2]);
+% subplot(212)
+% plot(x_rec)
+% title('重构信号');
+% 
+% figure(3)
+% subplot(211)
+% plot(abs(real(fft(x))));
+% title('原始信号频谱');
+% subplot(212)
+% plot(abs(real(fft(x_rec))));
+% title('重构信号频谱');
+% 
+% figure(4)
+% plot(abs(real(fft(x))));
+% hold on
+% plot(abs(real(fft(x_rec))),'r');
+% legend('原始信号', '重构信号');
+% title('原始信号VS重构信号');
+% 
+% figure(5)
+% subplot(311)
+% plot(x(:,2001:4000))
+% title('原始信号');
+% set(gca,'YLim',[-1.5 1.5]);
+% subplot(312)
+% plot(x_rec(:,2001:4000))
+% title('重构信号');
+% set(gca,'YLim',[-1.5 1.5]);
+% subplot(313)
+% plot(x(:,2001:4000))
+% hold on;
+% plot(x_rec(:,2001:4000),'r')
+% set(gca,'YLim',[-1.5 1.5]);
+% title('原始信号VS重构信号');
+% 
+% figure(6)
+% subplot(211)
+% plot(x_rec(:,1:16000));
+% title('重构信号')
+% subplot(212)
+% plot(st1(:,1:16000));
+% title('2FSK信号');
 
 figure(7)
 subplot(211)
