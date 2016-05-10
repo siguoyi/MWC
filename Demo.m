@@ -174,20 +174,31 @@ fsk_sig2 = st1.*cos(2*pi*fc2*tt(:,1:16000));
 sss = st2 - st3;
 
 i=16000/len;
+bb=[];
 for m=0:i-1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%³éÑùÅÐ¾ö
 % [max_value,position] = max(abs(sss(1,m*len+1:(m+1)*len)));
-    if sss(1,m*len+253)>0;
+    if sss(1,m*len+158)>0;
+        bb = [bb 0];
 %     if sss(1,position)>0;
         for j=m*len+1:(m+1)*len;
              at(1,j)=0;
         end
     else
+        bb = [bb 1];
         for j=m*len+1:(m+1)*len;
              at(1,j)=1;
         end
     end
 end
+bb=bb;
+count = 0;
+for ii=1:i
+    if b(1,ii) == bb(1,ii)
+        count = count + 1;
+    end
+end
+count
 %% plot module
 % figure(1)
 % subplot(211)
