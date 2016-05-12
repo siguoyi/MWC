@@ -178,7 +178,7 @@ bb=[];
 for m=0:i-1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%抽样判决
 % [max_value,position] = max(abs(sss(1,m*len+1:(m+1)*len)));
-    if sss(1,m*len+158)>0;
+    if mean(sss(1,m*len+1:(m+1)*len))>0;
         bb = [bb 0];
 %     if sss(1,position)>0;
         for j=m*len+1:(m+1)*len;
@@ -260,21 +260,25 @@ count
 % title('2FSK信号');
 
 figure(7)
-subplot(211)
+subplot(311)
 plot(sss)
 set(gca,'YLim',[-1.5 1.5]);
 title('抽样判决波形');
-subplot(212)
+subplot(312)
 plot(at)
 set(gca,'YLim',[-1.5 1.5]);
 title('重构码元波形');
-
-figure(8)
-subplot(211)
+subplot(313)
 plot(b)
 set(gca,'YLim',[-1.5 1.5]);
 title('原始码元波形');
-subplot(212)
-plot(at)
-set(gca,'YLim',[-1.5 1.5]);
-title('重构码元波形');
+
+% figure(8)
+% subplot(211)
+% plot(b)
+% set(gca,'YLim',[-1.5 1.5]);
+% title('原始码元波形');
+% subplot(212)
+% plot(at)
+% set(gca,'YLim',[-1.5 1.5]);
+% title('重构码元波形');
