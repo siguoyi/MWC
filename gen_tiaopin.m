@@ -1,4 +1,4 @@
-function [s fc1 fc2 s1 tt b]=gen_tiaopin(fc,fs,N,len)
+function [s fc1 fc2 s1 tt a]=gen_tiaopin(fc,fs,N,len)
 
 %% =============== Éú³ÉFSKÐÅºÅ =====================
 num=32;;
