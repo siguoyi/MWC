@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 function [s fc1 fc2 s1 tt aa b]=gen_tiaopin(fc,fs,N,len)
+=======
+function [s fc1 fc2 s1 tt a]=gen_tiaopin(fc,fs,N,len)
+>>>>>>> 197a28d402892d90384da5e3945ae482c1258284
 
 %% =============== Éú³ÉFSKÐÅºÅ =====================
 num=64;;
