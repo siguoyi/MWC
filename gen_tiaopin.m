@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 function [s fc1 fc2 s1 tt aa b]=gen_tiaopin(fc,fs,N,len)
-=======
-function [s fc1 fc2 s1 tt a]=gen_tiaopin(fc,fs,N,len)
->>>>>>> 197a28d402892d90384da5e3945ae482c1258284
-
 %% =============== 生成FSK信号 =====================
 num=64;;
 i=num;%基带信号码元数
