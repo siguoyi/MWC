@@ -51,8 +51,8 @@ fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
 han_win = hann(length(x))';             % Add window
 x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
-len=500;
-[signal fc1 fc2 s1 tt b] = gen_tiaopin(10e6,100e6,length(x),len);
+len=250;
+[signal fc1 fc2 s1 tt aa b] = gen_tiaopin(10e6,100e6,length(x),len);
 x=real(signal);
 s1 = [s1 zeros(1,R*K0*L)];
 tt = [tt zeros(1,R*K0*L)];
@@ -194,7 +194,7 @@ end
 bb=bb;
 count = 0;
 for ii=1:i
-    if b(1,ii) == bb(1,ii)
+    if aa(1,ii) == bb(1,ii)
         count = count + 1;
     end
 end

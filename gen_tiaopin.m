@@ -1,10 +1,11 @@
-function [s fc1 fc2 s1 tt b]=gen_tiaopin(fc,fs,N,len)
+function [s fc1 fc2 s1 tt aa b]=gen_tiaopin(fc,fs,N,len)
 
 %% =============== 生成FSK信号 =====================
-num=32;;
+num=64;;
 i=num;%基带信号码元数
 n=16000;
 a=round(rand(1,i)) %产生随机序列
+aa =a ;
 t1=linspace(0,5e-3,n);
 fc1=6e3;%载波1频率
 fc2=8e3;%载波2频率
