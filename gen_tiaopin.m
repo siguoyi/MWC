@@ -1,6 +1,6 @@
 function [s fc1 fc2 s1 tt aa b]=gen_tiaopin(fc,fs,N,len)
 %% =============== 生成FSK信号 =====================
-num=64;;
+num=8;;
 i=num;%基带信号码元数
 n=16000;
 a=round(rand(1,i)) %产生随机序列

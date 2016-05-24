@@ -51,7 +51,7 @@ fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
 han_win = hann(length(x))';             % Add window
 x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
-len=250;
+len=2000;
 [signal fc1 fc2 s1 tt aa b] = gen_tiaopin(10e6,100e6,length(x),len);
 x=real(signal);
 s1 = [s1 zeros(1,R*K0*L)];
@@ -200,25 +200,25 @@ for ii=1:i
 end
 count
 %% plot module
-% figure(1)
-% subplot(211)
-% plot(x)
-% grid on;
-% plot(x)
-% title('原始信号');
-% set(gca,'YLim',[-2 2]);
-% subplot(212)
-% plot(abs(real(fft(x))));
-% title('原始信号频谱');
-% 
-% figure(2)
-% subplot(211)
-% plot(x)
-% title('原始信号');
-% set(gca,'YLim',[-2 2]);
-% subplot(212)
-% plot(x_rec)
-% title('重构信号');
+figure(1)
+subplot(211)
+plot(x(1,1:16000))
+title('原始信号');
+set(gca,'YLim',[-2 2]);
+subplot(212)
+plot(abs(real(fft(x))));
+title('原始信号频谱');
+
+figure(2)
+subplot(211)
+plot(x(1,1:16000))
+title('原始信号');
+set(gca,'YLim',[-2 2]);
+subplot(212)
+plot(x_rec(1,1:16000))
+title('重构信号');
+set(gca,'YLim',[-2 2]);
+
 % 
 % figure(3)
 % subplot(211)
