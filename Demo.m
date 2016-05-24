@@ -6,7 +6,7 @@
 clear,close all
 
 %% Signal model
-SNR = 10;                                   % Input SNR
+SNR = 30;                                   % Input SNR
 N = 8;                                      % Number of bands (when counting  a band and its conjugate version separately)
 B = 50e6;                                   % Maximal width of each band
 Bi = ones(1,N/2)*B;
@@ -123,8 +123,8 @@ A = conj(A);
 
 SNR_val = 10^(SNR/10);          % not dB
 % combine signal and noise
-% DigitalSamples = DigitalSignalSamples + DigitalNoiseSamples*sqrt(CurrentSNR/SNR_val);
-DigitalSamples = DigitalSignalSamples;
+DigitalSamples = DigitalSignalSamples + DigitalNoiseSamples*sqrt(CurrentSNR/SNR_val);
+% DigitalSamples = DigitalSignalSamples;
 
 % Frame construction
 Q = DigitalSamples* DigitalSamples';
@@ -261,15 +261,15 @@ set(gca,'YLim',[-2 2]);
 
 figure(7)
 subplot(311)
-plot(sss)
+plot(sss,'linewidth',2)
 set(gca,'YLim',[-1.5 1.5]);
 title('抽样判决波形');
 subplot(312)
-plot(at)
+plot(at,'linewidth',2)
 set(gca,'YLim',[-1.5 1.5]);
 title('重构码元波形');
 subplot(313)
-plot(b)
+plot(b,'linewidth',2)
 set(gca,'YLim',[-1.5 1.5]);
 title('原始码元波形');
 
