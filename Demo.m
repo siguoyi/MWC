@@ -6,7 +6,7 @@
 clear,close all
 
 %% Signal model
-SNR = 30;                                   % Input SNR
+SNR = -10;                                   % Input SNR
 N = 8;                                      % Number of bands (when counting  a band and its conjugate version separately)
 B = 50e6;                                   % Maximal width of each band
 Bi = ones(1,N/2)*B;
@@ -51,7 +51,7 @@ fi = rand(1,N/2)*(fnyq/2-2*B) + B;      % Draw random carrier within [0, fnyq/2]
 han_win = hann(length(x))';             % Add window
 x = x.*han_win;
 % x=real(exp(j*2*pi*10e6/100e6*([0:length(x)-1])));
-len=250;
+len=500;
 [signal fc1 fc2 s1 tt aa b] = gen_tiaopin(10e6,100e6,length(x),len);
 x=real(signal);
 s1 = [s1 zeros(1,R*K0*L)];
@@ -123,8 +123,8 @@ A = conj(A);
 
 SNR_val = 10^(SNR/10);          % not dB
 % combine signal and noise
-% DigitalSamples = DigitalSignalSamples + DigitalNoiseSamples*sqrt(CurrentSNR/SNR_val);
-DigitalSamples = DigitalSignalSamples;
+DigitalSamples = DigitalSignalSamples + DigitalNoiseSamples*sqrt(CurrentSNR/SNR_val);
+% DigitalSamples = DigitalSignalSamples;
 
 % Frame construction
 Q = DigitalSamples* DigitalSamples';
