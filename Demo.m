@@ -156,7 +156,7 @@ x_rec = real(x_rec);
 % x_rec(:,12001:14000) = 0;
 x_rec(:,16001:19695) = 0;
 % sig = x + noise*sqrt(CurrentSNR/SNR_val);
-snr1 = 20.*log10(norm(x(:,2601:3600))/norm(x(:,2601:3600)-x_rec(:,2601:3600)))
+snr1 = 20.*log10(norm(x(:,2001:4000))/norm(x(:,2001:4000)-x_rec(:,2001:4000)))
 snr = 20.*log10(norm(x)/norm(x-x_rec))
 %% demodulator
 temp_fsk = x_rec(:,1:16000).*s1(:,1:16000);
